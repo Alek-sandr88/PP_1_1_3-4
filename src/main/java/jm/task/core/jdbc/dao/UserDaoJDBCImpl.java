@@ -47,7 +47,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void removeUserById(long id) {
@@ -76,13 +75,16 @@ public class UserDaoJDBCImpl implements UserDao {
                         rs.getByte("age"));
                 listUser.add(user);
             }
-            System.out.println(listUser);
+//            System.out.println(listUser);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
             try {
+                assert connection != null;
                 connection.close();
+                assert statement != null;
                 statement.close();
+                assert rs != null;
                 rs.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -93,7 +95,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Connection connection = Util.getConnection();
-             PreparedStatement prs = connection.prepareStatement("delete from users")) {
+             PreparedStatement prs = connection.prepareStatement("truncate table users")) {
             prs.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

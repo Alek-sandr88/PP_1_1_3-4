@@ -7,9 +7,12 @@ public class Main {
     public static void main(String[] args) {
         UserDao dao = new UserDaoJDBCImpl();
         dao.createUsersTable();
-        dao.saveUser("Igor","Ivanov", (byte) 45);
-        dao.saveUser("Aleksander","Petrov", (byte) 33);
-        dao.saveUser("Lilia","Iva", (byte) 30);
-        dao.saveUser("Olga","Ivan", (byte) 48);
+        dao.saveUser("Lilia", "Per", (byte) 30);
+        dao.saveUser("Olga", "Iva", (byte) 48);
+        dao.saveUser("Aleksander", "Petrov", (byte) 48);
+        dao.saveUser("Igor", "Ivanov", (byte) 48);
+        dao.getAllUsers().forEach(System.out::println);
+        dao.cleanUsersTable();
+        dao.dropUsersTable();
     }
 }
