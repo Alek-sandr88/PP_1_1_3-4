@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    SessionFactory factory = Util.getSessionFactory();
+    SessionFactory factory = Util.getInstance().getSessionFactory();
 
     public UserDaoHibernateImpl() {
 
@@ -109,7 +109,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("delete from users").executeUpdate();
+            session.createSQLQuery("TRUNCATE TABLE users").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
