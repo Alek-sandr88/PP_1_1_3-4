@@ -59,7 +59,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         List<User> listUser = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
@@ -67,7 +67,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             connection = Util.getConnection();
             statement = connection.createStatement();
-            rs = statement.executeQuery("select * from users");
+            rs = statement.executeQuery("SELECT * FROM users");
             while (rs.next()) {
                 User user = new User(
                         rs.getString("name"),
@@ -75,19 +75,17 @@ public class UserDaoJDBCImpl implements UserDao {
                         rs.getByte("age"));
                 listUser.add(user);
             }
-//            System.out.println(listUser);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                assert connection != null;
+            if (connection != null) {
                 connection.close();
-                assert statement != null;
+            }
+            if (statement != null) {
                 statement.close();
-                assert rs != null;
+            }
+            if (rs != null) {
                 rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
         }
         return listUser;
