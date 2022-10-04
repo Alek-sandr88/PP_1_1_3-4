@@ -59,7 +59,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         List<User> listUser = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
@@ -79,18 +79,28 @@ public class UserDaoJDBCImpl implements UserDao {
             throw new RuntimeException(e);
         } finally {
             if (connection != null) {
-                connection.close();
+                try {
+                    connection.close();
+                } catch (SQLException ignored) {
+                }
             }
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
             }
             if (rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException ignored) {
+                }
             }
+            return listUser;
         }
-        return listUser;
     }
 
+    @Override
     public void cleanUsersTable() {
         try (Connection connection = Util.getConnection();
              PreparedStatement prs = connection.prepareStatement("truncate table users")) {
@@ -98,6 +108,5 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
